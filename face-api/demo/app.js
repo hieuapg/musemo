@@ -56,7 +56,7 @@ const APIController = (function() {
     const _getRecommendations = async (token, emotion) => {
         const attributes = _mapEmotionToAttributes(emotion);
     
-        const result = await fetch(`https://api.spotify.com/v1/recommendations?seed_genres=pop&target_valence=${attributes.valence}&target_energy=${attributes.energy}`, {
+        const result = await fetch(`https://api.spotify.com/v1/recommendations?seed_genres=pop&target_valence=${attributes.valence}&target_energy=${attributes.energy}&limit=${16}`, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + token }
         });

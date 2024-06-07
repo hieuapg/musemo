@@ -63,5 +63,23 @@
 .header {
     text-align: center;
     margin-top: 36px;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.button-web {
+    width: auto;
+}
+
+.describor {
+    margin-left: 150px;
+}
+
+.song-list-wrapper {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.song-list {
+    width: 100%;
+    max-width: 500px; /* Or whatever width you prefer */
 }
