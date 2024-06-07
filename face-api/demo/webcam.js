@@ -213,6 +213,7 @@ async function toggleWebcam() {
     video.srcObject = null;
     button.textContent = 'Open Webcam';
     isCameraActive = false;
+    container2.style.display = 'none'; // Hide container2 when closing webcam
 
     const ctx = canvas.getContext('2d');
     if (ctx) {
@@ -222,14 +223,22 @@ async function toggleWebcam() {
 }
 
 
+
 document.getElementById('btn_submit2').addEventListener('click', toggleWebcam);
 
 // Initialize the button text
 window.onload = function() {
   const button = document.getElementById('btn_submit2');
+  const container2 = document.querySelector('.container2');
+  
   if (button) {
     button.textContent = 'Open Webcam';
   }
+
+  if (container2) {
+    container2.style.display = 'none'; // Hide container2 initially
+  }
+
   main();
 };
 
