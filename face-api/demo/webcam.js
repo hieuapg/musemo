@@ -60,7 +60,7 @@ function drawFaces(canvas, data) {
 
     // draw face points for each face
     ctx.globalAlpha = 0.8;
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = 'lightblue';
     const pointSize = 2;
     for (let i = 0; i < person.landmarks.positions.length; i++) {
       ctx.beginPath();
@@ -188,8 +188,49 @@ async function main() {
   log(`Version: FaceAPI ${str(faceapi?.version || '(not loaded)')} TensorFlow/JS ${str(faceapi.tf?.version_core || '(not loaded)')} Backend: ${str(faceapi.tf?.getBackend() || '(not loaded)')}`);
 
   await setupFaceAPI();
-  await setupCamera();
 }
 
 // start processing as soon as page is loaded
-window.onload = main;
+let isCameraActive = false;
+
+async function toggleWebcam() {
+  const video = document.getElementById('video');
+  const canvas = document.getElementById('canvas');
+  const button = document.getElementById('btn_submit2');
+  const container2 = document.querySelector('.container2');
+
+  if (!video || !canvas || !button || !container2) return;
+
+  if (!isCameraActive) {
+    await setupCamera();
+    container2.style.display = 'block'; // Show container2
+    button.textContent = 'Close Webcam';
+    isCameraActive = true;
+  } else {
+    if (video.srcObject) {
+      video.srcObject.getTracks().forEach(track => track.stop());
+    }
+    video.srcObject = null;
+    button.textContent = 'Open Webcam';
+    isCameraActive = false;
+
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+}
+
+
+document.getElementById('btn_submit2').addEventListener('click', toggleWebcam);
+
+// Initialize the button text
+window.onload = function() {
+  const button = document.getElementById('btn_submit2');
+  if (button) {
+    button.textContent = 'Open Webcam';
+  }
+  main();
+};
+
+

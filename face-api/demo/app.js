@@ -38,6 +38,14 @@ const APIController = (function() {
                 attributes.valence = 0.5;
                 attributes.energy = 0.5;
                 break;
+            case 'disgusted':
+                attributes.valence = 0.1;
+                attributes.energy = 0.5;
+                break;
+            case 'surprised':
+                attributes.valence = 0.6;
+                attributes.energy = 0.9;
+                break;
             default:
                 break;
         }

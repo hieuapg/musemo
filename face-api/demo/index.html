@@ -8,7 +8,14 @@
     <link href="./styles.css" rel="stylesheet">
   </head>
   <body>
-    <div class="container2" style="height: 406px;">
+    <div class="header">
+      <h1>Spotify & Facial Recognition Music Search</h1>
+    </div>
+    <div class="describor">
+      <h4 style="margin-bottom: 15px;">Open the webcam and get your current mood for a spotify search</h4>
+      <button type="button" id="btn_submit2" class="btn btn-success button-web">Close Webcam</button>
+    </div>
+    <div class="container2" style="height: 406px; display: none">
       <video id="video" playsinline class="video element" width="720"></video>
       <canvas id="canvas" class="canvas element"></canvas>
     </div>
@@ -29,8 +36,6 @@
             <div class="list-group song-list" id="song-list">
                 
             </div>                                             
-        </div>
-        <div class="offset-md-1 col-sm-4" id="song-detail">                
         </div>
     </div>    
   </div>
