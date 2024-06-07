@@ -241,5 +241,3 @@ window.onload = function() {
 
   main();
 };
-
-
