@@ -14,7 +14,6 @@ const APIController = (function() {
         });
 
         const data = await result.json();
-        console.log('Token:', data.access_token); // Debugging statement
         return data.access_token;
     };
 
