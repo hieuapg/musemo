@@ -14,6 +14,7 @@ const APIController = (function() {
         });
 
         const data = await result.json();
+        console.log('Token:', data.access_token); // Debugging statement
         return data.access_token;
     };
 
@@ -78,9 +79,7 @@ const APIController = (function() {
     };
 
     const _getPlaylists = async (token, emotion) => {
-        const attributes = _mapEmotionToAttributes(emotion);
-
-        const result = await fetch(`https://api.spotify.com/v1/browse/featured-playlists?limit=16`, {
+        const result = await fetch(`https://api.spotify.com/v1/search?q=${emotion}&type=playlist&limit=16`, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + token }
         });
@@ -180,11 +179,8 @@ document.addEventListener('DOMContentLoaded', () => {
             listItem.className = 'list-group-item list-group-item-action';
             listItem.href = playlist.external_urls.spotify;
             listItem.target = '_blank';
-            listItem.innerText = `${playlist.name} tracks`;
+            listItem.innerText = `${playlist.name} - ${playlist.tracks.total} tracks`;
             songList.appendChild(listItem);
         });
     });
 });
-
-//TODO: Create buttons to switch between tracks and artists
-// Make list of artists
