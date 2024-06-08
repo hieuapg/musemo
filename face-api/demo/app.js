@@ -16,7 +16,7 @@ const APIController = (function() {
         const data = await result.json();
         console.log('Token:', data.access_token); // Debugging statement
         return data.access_token;
-    }
+    };
 
     const _mapEmotionToAttributes = (emotion) => {
         let attributes = { valence: 0.5, energy: 0.5 };
@@ -51,7 +51,7 @@ const APIController = (function() {
         }
     
         return attributes;
-    }
+    };
 
     const _getRecommendations = async (token, emotion) => {
         const attributes = _mapEmotionToAttributes(emotion);
@@ -62,9 +62,34 @@ const APIController = (function() {
         });
     
         const data = await result.json();
-        console.log('Tracks:', data.tracks); // Debugging statement
         return data.tracks;
-    }
+    };
+
+    const _getArtists = async (token, emotion) => {
+        const tracks = await _getRecommendations(token, emotion);
+        const artistId = tracks[0].artists[0].id;
+
+        const result = await fetch(`https://api.spotify.com/v1/artists/${artistId}/related-artists`, {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        const data = await result.json();
+        return data.artists;
+    };
+
+    const _getPlaylists = async (token, emotion) => {
+        const attributes = _mapEmotionToAttributes(emotion);
+
+        const result = await fetch(`https://api.spotify.com/v1/browse/featured-playlists?limit=16`, {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+
+        const data = await result.json();
+        const playlists = data.playlists.items;
+        return playlists;
+    };
 
     return {
         getToken() {
@@ -72,23 +97,27 @@ const APIController = (function() {
         },
         getRecommendations(token, emotion) {
             return _getRecommendations(token, emotion);
+        },
+        getArtists(token, emotion) {
+            return _getArtists(token, emotion); 
+        },
+        getPlaylists(token, emotion) {
+            return _getPlaylists(token, emotion);
         }
-    }
+    };
 })();
 
 document.addEventListener('DOMContentLoaded', () => {
-    const btnSubmit = document.getElementById('btn_submit');
+    const btnSubmit = document.getElementById('btn_submit_tracks');
     const expressionOutput = document.getElementById('expressionOutput');
     const songList = document.getElementById('song-list');
+    const btnSubmit2 = document.getElementById('btn_submit_artists');
+    const btnSubmit3 = document.getElementById('btn_submit_playlists')
 
     btnSubmit.addEventListener('click', async () => {
+        
         // Extract the emotion from the HTML
         const emotion = expressionOutput.innerText.trim();
-        console.log('Detected Emotion:', emotion); // Debugging statement
-        if (!emotion) {
-            alert('No emotion detected.');
-            return;
-        }
 
         // Get the Spotify token
         const token = await APIController.getToken();
@@ -109,4 +138,54 @@ document.addEventListener('DOMContentLoaded', () => {
             songList.appendChild(listItem);
         });
     });
+
+    btnSubmit2.addEventListener('click', async () => {
+        // Extract the emotion from the HTML
+        const emotion = expressionOutput.innerText.trim();
+
+        // Get the Spotify token
+        const token = await APIController.getToken();
+
+        // Get track recommendations based on the emotion
+        const artists = await APIController.getArtists(token, emotion);
+
+        //Clear previous results
+        songList.innerHTML = '';
+
+        //Populate artist list with new results
+        artists.forEach(artist => {
+            const listItem = document.createElement('a');
+            listItem.className = 'list-group-item list-group-item-action';
+            listItem.href = artist.external_urls.spotify;
+            listItem.target = '_blank';
+            const genres = artist.genres.slice(0, 3).join(', ');
+            listItem.innerText = `${artist.name} - ${genres}`;
+            songList.appendChild(listItem);
+        });
+    });
+
+    btnSubmit3.addEventListener('click', async () => {
+        const emotion = expressionOutput.innerText.trim();
+
+        // Get the Spotify token
+        const token = await APIController.getToken();
+
+        // Get track recommendations based on the emotion
+        const playlists = await APIController.getPlaylists(token, emotion);
+
+        //Clear previous results
+        songList.innerHTML = '';
+
+        playlists.forEach(playlist => {
+            const listItem = document.createElement('a');
+            listItem.className = 'list-group-item list-group-item-action';
+            listItem.href = playlist.external_urls.spotify;
+            listItem.target = '_blank';
+            listItem.innerText = `${playlist.name} tracks`;
+            songList.appendChild(listItem);
+        });
+    });
 });
+
+//TODO: Create buttons to switch between tracks and artists
+// Make list of artists
