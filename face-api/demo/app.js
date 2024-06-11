@@ -55,7 +55,7 @@ const APIController = (function() {
     const _getRecommendations = async (token, emotion) => {
         const attributes = _mapEmotionToAttributes(emotion);
     
-        const result = await fetch(`https://api.spotify.com/v1/recommendations?seed_genres=pop&target_valence=${attributes.valence}&target_energy=${attributes.energy}&limit=${16}`, {
+        const result = await fetch(`https://api.spotify.com/v1/recommendations?seed_genres=pop&target_valence=${attributes.valence}&target_energy=${attributes.energy}&limit=${24}`, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + token }
         });
@@ -78,7 +78,7 @@ const APIController = (function() {
     };
 
     const _getPlaylists = async (token, emotion) => {
-        const result = await fetch(`https://api.spotify.com/v1/search?q=${emotion}&type=playlist&limit=16`, {
+        const result = await fetch(`https://api.spotify.com/v1/search?q=${emotion}&type=playlist&limit=24`, {
             method: 'GET',
             headers: { 'Authorization': 'Bearer ' + token }
         });
@@ -127,12 +127,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Populate song list with new results
         tracks.forEach(track => {
-            const listItem = document.createElement('a');
-            listItem.className = 'list-group-item list-group-item-action';
-            listItem.href = track.external_urls.spotify;
-            listItem.target = '_blank';
-            listItem.innerText = `${track.name} - ${track.artists[0].name}`;
-            songList.appendChild(listItem);
+            const card = document.createElement('div');
+            card.className = 'card';
+        
+            const cardImage = document.createElement('img');
+            cardImage.src = track.album.images[0] ? track.album.images[0].url : 'default_image_url.jpg'; // Use a default image if no image is available
+            cardImage.alt = track.name;
+            card.appendChild(cardImage);
+        
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            card.appendChild(cardBody);
+        
+            const cardTitle = document.createElement('h5');
+            cardTitle.className = 'card-title';
+            cardTitle.innerText = track.name;
+            cardBody.appendChild(cardTitle);
+        
+            const cardText = document.createElement('p');
+            cardText.className = 'card-text';
+            cardText.innerText = track.artists[0].name;
+            cardBody.appendChild(cardText);
+        
+            const cardLink = document.createElement('a');
+            cardLink.className = 'btn btn-primary';
+            cardLink.href = track.external_urls.spotify;
+            cardLink.target = '_blank';
+            cardLink.innerText = 'Listen on Spotify';
+            cardBody.appendChild(cardLink);
+        
+            songList.appendChild(card);
         });
     });
 
@@ -150,14 +174,37 @@ document.addEventListener('DOMContentLoaded', () => {
         songList.innerHTML = '';
 
         //Populate artist list with new results
-        artists.forEach(artist => {
-            const listItem = document.createElement('a');
-            listItem.className = 'list-group-item list-group-item-action';
-            listItem.href = artist.external_urls.spotify;
-            listItem.target = '_blank';
-            const genres = artist.genres.slice(0, 3).join(', ');
-            listItem.innerText = `${artist.name} - ${genres}`;
-            songList.appendChild(listItem);
+        artists.slice(0, 18).forEach(artist => {
+            const card = document.createElement('div');
+            card.className = 'card';
+        
+            const cardImage = document.createElement('img');
+            cardImage.src = artist.images[0] ? artist.images[0].url : 'default_image_url.jpg'; // Use a default image if no image is available
+            cardImage.alt = artist.name;
+            card.appendChild(cardImage);
+        
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            card.appendChild(cardBody);
+        
+            const cardTitle = document.createElement('h5');
+            cardTitle.className = 'card-title';
+            cardTitle.innerText = artist.name;
+            cardBody.appendChild(cardTitle);
+        
+            const cardText = document.createElement('p');
+            cardText.className = 'card-text';
+            cardText.innerText = `${artist.genres[0]}`;
+            cardBody.appendChild(cardText);
+        
+            const cardLink = document.createElement('a');
+            cardLink.className = 'btn btn-primary';
+            cardLink.href = artist.external_urls.spotify;
+            cardLink.target = '_blank';
+            cardLink.innerText = 'Listen on Spotify';
+            cardBody.appendChild(cardLink);
+        
+            songList.appendChild(card);
         });
     });
 
@@ -174,12 +221,36 @@ document.addEventListener('DOMContentLoaded', () => {
         songList.innerHTML = '';
 
         playlists.forEach(playlist => {
-            const listItem = document.createElement('a');
-            listItem.className = 'list-group-item list-group-item-action';
-            listItem.href = playlist.external_urls.spotify;
-            listItem.target = '_blank';
-            listItem.innerText = `${playlist.name} - ${playlist.tracks.total} tracks`;
-            songList.appendChild(listItem);
+            const card = document.createElement('div');
+            card.className = 'card';
+        
+            const cardImage = document.createElement('img');
+            cardImage.src = playlist.images[0] ? playlist.images[0].url : 'default_image_url.jpg'; // Use a default image if no image is available
+            cardImage.alt = playlist.name;
+            card.appendChild(cardImage);
+        
+            const cardBody = document.createElement('div');
+            cardBody.className = 'card-body';
+            card.appendChild(cardBody);
+        
+            const cardTitle = document.createElement('h5');
+            cardTitle.className = 'card-title';
+            cardTitle.innerText = playlist.name;
+            cardBody.appendChild(cardTitle);
+        
+            const cardText = document.createElement('p');
+            cardText.className = 'card-text';
+            cardText.innerText = `${playlist.tracks.total} tracks`;
+            cardBody.appendChild(cardText);
+        
+            const cardLink = document.createElement('a');
+            cardLink.className = 'btn btn-primary';
+            cardLink.href = playlist.external_urls.spotify;
+            cardLink.target = '_blank';
+            cardLink.innerText = 'Listen on Spotify';
+            cardBody.appendChild(cardLink);
+        
+            songList.appendChild(card);
         });
     });
 });
