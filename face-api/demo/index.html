@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>FaceAPI Live WebCam Demo</title>
+    <title>Musemo</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <script src="./webcam.js" type="module"></script>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -24,12 +24,11 @@
       <h5 id="expressionOutput" style="margin-bottom: 15px;"></h5>
       <button type="button" id="btn_submit_tracks" class="btn btn-primary button-web">Tracks</button> 
       <button type="button" id="btn_submit_artists" class="btn btn-warning button-web">Artists</button>
-      <button type="button" id="btn_submit_playlists" class="btn btn-info button-web">Playlists</button>
-    </div>                        
-    <div class="row justify-content-center" style="margin-top: 30px; margin-bottom: 20px;">
-     <div class="list-group song-list" id="song-list" style="min-width: 500px;">
-     </div>                                             
-    </div>    
+      <button type="button" id="btn_submit_playlists" class="btn btn-info button-web">Playlists</button>                      
+      <div class="row justify-content-center" style="margin-top: 30px; margin-bottom: 20px;">
+        <div class="song-list" id="song-list" style="min-width: 500px;">
+        </div>
+      </div>                                            
   </div>
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
